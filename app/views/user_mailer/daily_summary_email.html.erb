@@ -1,0 +1,89 @@
+<%
+  # Requirements are to show this for the current day only but will fetch over all time to include more data in demo
+  @calls = CallLog.group(:agent_name).count
+  @durations = CallLog.group(:agent_name).sum(:duration)
+  @waiting_times = CallLog.group(:agent_name).average(:waiting_time)
+%>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style>
+      .styled-table {
+          border-collapse: collapse;
+          margin: 25px 0;
+          font-size: 0.9em;
+          font-family: sans-serif;
+          min-width: 400px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+      }
+      .styled-table thead tr {
+          background-color: #009879;
+          color: #ffffff;
+          text-align: left;
+      }
+      .styled-table th,
+      .styled-table td {
+          padding: 12px 15px;
+      }
+      .styled-table tbody tr {
+          border-bottom: 1px solid #dddddd;
+      }
+
+      .styled-table tbody tr:nth-of-type(even) {
+          background-color: #f3f3f3;
+      }
+
+      .styled-table tbody tr:last-of-type {
+          border-bottom: 2px solid #009879;
+      }
+      .styled-table tbody tr.active-row {
+          font-weight: bold;
+          color: #009879;
+      }
+      h1 {
+          display: block;
+          font-size: 2em;
+          font-family: sans-serif;
+          margin-block-start: 0.67em;
+          margin-block-end: 0.67em;
+          margin-inline-start: 0px;
+          margin-inline-end: 0px;
+          font-weight: bold;
+      }
+      strong {
+        font-family: sans-serif;
+      }
+    </style>
+</head>
+
+
+<body>
+    <h1>Talkdesk Daily Summary</h1>
+    <p>
+        Below is the daily summary of calls by agent on
+        <%= Date.today %>
+    </p>
+    <p>
+        <table class="styled-table">
+            <thead>
+              <th>Agent</th><th>Count Calls</th><th>Sum Duration (milliseconds)</th><th>Average Waiting Time (milliseconds)</th>
+            <thead>
+            <% @calls.each do | call | %>
+            <tr>
+              <td><%= call.first %></td>
+              <td><%= call.second %></td>
+              <td><%= @durations[call.first].second %></td>
+              <td><%= @waiting_times[call.first].second %></td>
+            </tr>
+            <% end %>
+        </table>
+    </p>
+    <p>
+        Click <a href="http://localhost:3000/notification/index">here</a> to view a detailed listing of all calls logged<br>
+    </p>
+    <p>Thanks and have a great day!</p>
+</body>
+
+</html>

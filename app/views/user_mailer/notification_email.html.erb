@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+
+<body>
+    <h1>Talkdesk Notification</h1>
+    <p>
+        A Talkdesk call has ended between
+        <%= @call_log.agent_name %> and
+        <%= @call_log.caller_number %>
+    </p>
+    <p>
+        Call details have been logged and are available for your review.<br>
+    </p>
+    <p>
+        Click <a href="http://localhost:3000/notification/index">here</a> to view a detailed listing of all calls logged<br>
+    </p>
+    <p>Thanks and have a great day!</p>
+</body>
+
+</html>

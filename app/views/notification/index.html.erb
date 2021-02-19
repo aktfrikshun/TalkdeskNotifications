@@ -1,0 +1,60 @@
+<h1>Call Log</h1>
+<table>
+    <tr>
+        <td>
+            <strong>Call count by day</strong><br />
+            <%= line_chart CallLog.group_by_day(:timestamp).count, download: true %>
+        </td>
+        <td>
+            <strong>Call count by agent</strong><br />
+            <%= pie_chart CallLog.group(:agent_name).count, download: true %>
+        </td>
+        <td>
+            <strong>Total call duration by Agent (s)</strong><br />
+            <%= bar_chart CallLog.group(:agent_name).sum('duration / 60'), download: true %>
+        </td>
+        <td>
+            <strong>Average wait time by Agent (ms)</strong><br />
+            <%= bar_chart CallLog.group(:agent_name).average(:waiting_time), download: true %>
+        </td>
+    </tr>
+</table>
+<table class="styled-table">
+    <thead>
+        <th>Agent Name</th>
+        <th>Caller Number</th>
+       	<th>CC Number</th>
+        <th>Status</th>
+        <th>Direction</th>
+        <th>Time</th>
+        <th>Duration (milliseconds)</th>
+        <th>Waiting Time (milliseconds)</th>
+        <% @calls.each do | call | %>
+        <tr>
+            <td>
+                <%= call.agent_name %>
+            </td>
+            <td>
+                <%= call.caller_number %>
+            </td>
+            <td>
+                <%= call.cc_number %>
+            </td>
+            <td>
+                <%= call.customer_status %>
+            </td>
+            <td>
+                <%= call.direction %>
+            </td>
+            <td>
+                <%= call.timestamp %>
+            </td>
+            <td>
+                <%= call.duration %>
+            </td>
+            <td>
+                <%= call.waiting_time %>
+            </td>
+        </tr>
+        <% end %>
+</table>
