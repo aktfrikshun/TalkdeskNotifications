@@ -7,8 +7,12 @@ class NotificationController < ApplicationController
   end
 
   def create
-    UserMailer.with(call_log: @cl).notification_email.deliver_later if @cl.customer_status == 'VIP'
-    render json: @cl.to_json
+    if @cl.valid?
+      UserMailer.with(call_log: @cl).notification_email.deliver_later if @cl.customer_status == 'VIP'
+      render json: @cl.to_json
+    else
+      render json: { errors: "Error processing input params: #{@cl.errors.full_messages}" }, status: 500
+    end
   end
 
   private
@@ -37,7 +41,7 @@ class NotificationController < ApplicationController
       @cl.cc_number = params['callData']['ccNumber']
       @cl.direction = params['callData']['direction']
     end
-    @cl.save!
+    @cl.save
   end
 
   def convert_to_milliseconds(value, unit)
